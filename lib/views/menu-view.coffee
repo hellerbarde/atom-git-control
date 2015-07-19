@@ -22,11 +22,19 @@ class MenuItem extends View
       @div class: "icon large #{item.icon}"
       @div item.menu
 
+  activate: (active) ->
+    @active = active
+
   initialize: (item) ->
     @item = item
+    if item.type == 'active'
+      @active = true
+    else
+      @active = false
 
   click: ->
-    @parentView.click(@item.id)
+    if @active
+      @parentView.click(@item.id)
 
 module.exports =
 class MenuView extends View
@@ -40,6 +48,8 @@ class MenuView extends View
 
   activate: (type, active) ->
     menuItems = @find(".item.#{type}")
+    for menuItem in menuItems
+      menuItem.spacePenView.activate(active)
     if active
       menuItems.removeClass('inactive')
     else
